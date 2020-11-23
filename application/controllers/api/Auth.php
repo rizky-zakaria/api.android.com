@@ -119,17 +119,17 @@ class Auth extends REST_Controller
             ];
 
             // siapkan token
-            $token = base64_encode(random_bytes(32));
-            $user_token = [
-                'email' => $email,
-                'token' => $token,
-                'date_created' => time()
-            ];
+            // $token = base64_encode(random_bytes(32));
+            // $user_token = [
+            //     'email' => $email,
+            //     'token' => $token,
+            //     'date_created' => time()
+            // ];
 
-            $this->db->insert('user', $data);
-            $this->db->insert('user_token', $user_token);
+            $send = $this->db->insert('user', $data);
+            // $this->db->insert('user_token', $user_token);
 
-            $send = $this->_sendEmail($token, 'verify');
+            // $send = $this->_sendEmail($token, 'verify');
 
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
             if ($send) {
