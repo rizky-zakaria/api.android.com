@@ -1,0 +1,26 @@
+ public function index_post()
+    {
+        $id_user = $this->post('id_user');
+        $cek = $this->user->cek($id_user);
+        if (!$cek) {
+            $user = $this->user->delUser($id_user);
+            if (!$user) {
+                $this->response([
+                    'status' => false,
+                    'messages' => "Data Tidak Di Temukan",
+                ], REST_Controller::HTTP_NOT_FOUND);
+            } else {
+                $this->response([
+                    'status' => true,
+                    'data' => $user,
+                    'messages' => "Berhasil di hapus",
+                ], REST_Controller::HTTP_OK);
+            }
+        } else {
+            $this->response([
+                'status' => false,
+                'messages' => "User Sedang Meminjam Buku",
+            ], REST_Controller::HTTP_OK);
+        }
+
+    }
