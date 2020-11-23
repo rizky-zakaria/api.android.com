@@ -97,19 +97,22 @@ class Auth extends REST_Controller
         //     'min_length' => 'Password too short!'
         // ]);
         // $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
+        $name = $this->post('name');
+        $password = $this->post('password');
+        $email = $this->post('email');
 
-        if ($this->form_validation->run() == false) {
-            $data['title'] = 'WPU User Registration';
-            $this->load->view('templates/auth_header', $data);
-            $this->load->view('auth/registration');
-            $this->load->view('templates/auth_footer');
+        if ($name == null) {
+            $this->response([
+                'status' => false,
+                'messages' => "can't not null",
+            ], REST_Controller::HTTP_NOT_FOUND);
         } else {
-            $email = $this->post('email');
+            // $email = $this->post('email');
             $data = [
-                'name' => $this->post('name'),
+                'name' => $name,
                 'email' => $email,
                 'image' => 'default.jpg',
-                'password' => $this->post('password'),
+                'password' => password_hash($password, PASSWORD_DEFAULT),
                 'role_id' => 2,
                 'is_active' => 0,
                 'date_created' => time()
@@ -131,7 +134,7 @@ class Auth extends REST_Controller
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
             if ($send) {
                 $this->response([
-                    'status' => false,
+                    'status' => true,
                     'messages' => "verify your email account",
                 ], REST_Controller::HTTP_OK);
             } else {
